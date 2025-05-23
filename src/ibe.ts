@@ -13,7 +13,7 @@ export class IBE {
 
     createDecryptionKey(secretKey: SecretKey | Uint8Array, identity: Identity): DecryptionKey {
         const sk = secretKey instanceof Uint8Array ? bn254.fields.Fr.fromBytes(secretKey) : secretKey.sk
-        return {k: identity.i.multiply(sk).toAffine()}
+        return {k: identity.i.multiply(sk)}
     }
 
     encrypt(message: Uint8Array, identity: Identity, publicKey: PublicKey) {
@@ -23,7 +23,7 @@ export class IBE {
     decrypt(ciphertext: Ciphertext, decryptionKey: DecryptionKey | Uint8Array): Uint8Array {
         try {
             const key = decryptionKey instanceof Uint8Array ? bn254.G1.ProjectivePoint.fromHex(decryptionKey) : decryptionKey.k
-            return decrypt(ciphertext, key, this.opts)
+            return decrypt(ciphertext, key.toAffine(), this.opts)
         } catch (err) {
             throw new Error("failed to decrypt the ciphertext - did you use the correct key?")
         }
@@ -60,5 +60,5 @@ export type PublicKey = {
 }
 
 export type DecryptionKey = {
-    k: G1
+    k: ProjPointType<Fp>
 }
