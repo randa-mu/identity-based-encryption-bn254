@@ -1,7 +1,7 @@
 import {bn254} from "@kevincharm/noble-bn254-drand"
 import {Fp} from "@noble/curves/abstract/tower"
 import {ProjPointType} from "@noble/curves/abstract/weierstrass"
-import {Ciphertext, createIdentity, decrypt, DEFAULT_OPTS, encrypt, G1, G2, IbeOpts} from "./crypto"
+import {Ciphertext, createIdentity, decrypt, DEFAULT_OPTS, encrypt, G2, IbeOpts} from "./crypto"
 
 export class IBE {
     constructor(private opts: IbeOpts = DEFAULT_OPTS) {
@@ -13,7 +13,7 @@ export class IBE {
 
     createDecryptionKey(secretKey: SecretKey | Uint8Array, identity: Identity): DecryptionKey {
         const sk = secretKey instanceof Uint8Array ? bn254.fields.Fr.fromBytes(secretKey) : secretKey.sk
-        return {k: identity.i.multiply(sk)}
+        return {bytes: bn254.ShortSignature.toRawBytes(identity.i.multiply(sk))}
     }
 
     encrypt(message: Uint8Array, identity: Identity, publicKey: PublicKey) {
@@ -22,8 +22,8 @@ export class IBE {
 
     decrypt(ciphertext: Ciphertext, decryptionKey: DecryptionKey | Uint8Array): Uint8Array {
         try {
-            const key = decryptionKey instanceof Uint8Array ? bn254.G1.ProjectivePoint.fromHex(decryptionKey) : decryptionKey.k
-            return decrypt(ciphertext, key.toAffine(), this.opts)
+            const key = decryptionKey instanceof Uint8Array ? decryptionKey : decryptionKey.bytes
+            return decrypt(ciphertext, bn254.G1.ProjectivePoint.fromHex(key).toAffine(), this.opts)
         } catch (err) {
             throw new Error("failed to decrypt the ciphertext - did you use the correct key?")
         }
@@ -34,7 +34,11 @@ export class IBE {
     }
 
     static parseDecryptionKey(bytes: Uint8Array): DecryptionKey {
-        return {k: bn254.G1.ProjectivePoint.fromHex(bytes)}
+        return {bytes: bytes}
+    }
+
+    static parseSecretKey(sk: Uint8Array | bigint): SecretKey {
+        return {sk: sk instanceof Uint8Array ? bn254.fields.Fr.fromBytes(sk) : sk}
     }
 
     static createSecretKey(): SecretKey {
@@ -60,5 +64,5 @@ export type PublicKey = {
 }
 
 export type DecryptionKey = {
-    k: ProjPointType<Fp>
+    bytes: Uint8Array
 }

@@ -1,4 +1,4 @@
-import { bn254 as _bn254 } from "@noble/curves/bn254"
+import { bn254 as _bn254 } from "@kevincharm/noble-bn254-drand"
 import { psiFrobenius } from "@noble/curves/abstract/tower"
 import { BasicWCurve } from "@noble/curves/abstract/weierstrass"
 import { validateField, FpIsSquare } from "@noble/curves/abstract/modular"
