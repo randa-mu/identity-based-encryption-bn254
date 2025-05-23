@@ -174,7 +174,7 @@ export function preprocessDecryptionKey(ciphertext: Ciphertext, decryptionKey: G
 
 // Concrete instantiation of H_1 that outputs a point on G1
 // H_1: \{0, 1\}^\ast \rightarrow G_1
-function hashIdentityToG1(identity: Uint8Array, opts: IbeOpts): ProjPointType<Fp>{
+export function hashIdentityToG1(identity: Uint8Array, opts: IbeOpts): ProjPointType<Fp>{
     const hasher = createHasher(bn254.G1.ProjectivePoint, mapToG1, {
         p: htfDefaultsG1.p,
         m: htfDefaultsG1.m,
@@ -188,7 +188,7 @@ function hashIdentityToG1(identity: Uint8Array, opts: IbeOpts): ProjPointType<Fp
 
 // Concrete instantiation of H_2 that outputs a uniformly random byte string of length n
 // H_2: G_T \rightarrow \{0, 1\}^\ell
-function hashToBytes(shared_key: GT, n: number, opts: IbeOpts): Uint8Array {
+export function hashToBytes(shared_key: GT, n: number, opts: IbeOpts): Uint8Array {
     // encode shared_key as BE(shared_key.c0.c0.c0) || BE(shared_key.c0.c0.c1) || BE(shared_key.c0.c1.c0) || ...
     if (opts.expand_fn == "xmd") {
         return expand_message_xmd(bn254.fields.Fp12.toBytes(shared_key), opts.dsts.H2, n, opts.hash)
