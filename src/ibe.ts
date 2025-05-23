@@ -19,11 +19,11 @@ export class IBE {
         return {bytes: bn254.ShortSignature.toRawBytes(identity.i.multiply(sk))}
     }
 
-    isValidDecryptionKey(publicKey: PublicKey, decryptionKey: DecryptionKey, identity: Identity | Uint8Array): boolean {
-        const sig = decryptionKey.bytes
-        const pk = bn254.G2.ProjectivePoint.fromAffine(publicKey.p)
+    isValidDecryptionKey(publicKey: PublicKey | Uint8Array, decryptionKey: DecryptionKey | Uint8Array, identity: Identity | Uint8Array): boolean {
+        const sig = decryptionKey instanceof Uint8Array ? decryptionKey : decryptionKey.bytes
+        const pk = publicKey instanceof Uint8Array ? IBE.parsePublicKey(publicKey) : publicKey
         const m = identity instanceof Uint8Array ? identity : identity.m
-        return bn254.verifyShortSignature(sig, m, pk, {DST: this.opts.dsts.H1_G1})
+        return bn254.verifyShortSignature(sig, m, bn254.G2.ProjectivePoint.fromAffine(pk.p), {DST: this.opts.dsts.H1_G1})
     }
 
     encrypt(message: Uint8Array, identity: Identity, publicKey: PublicKey) {
