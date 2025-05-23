@@ -8,12 +8,22 @@ export class IBE {
     }
 
     createIdentity(bytes: Uint8Array): Identity {
-        return {i: createIdentity(bytes, this.opts)}
+        return {
+            i: createIdentity(bytes, this.opts),
+            m: bytes
+        }
     }
 
     createDecryptionKey(secretKey: SecretKey | Uint8Array, identity: Identity): DecryptionKey {
         const sk = secretKey instanceof Uint8Array ? bn254.fields.Fr.fromBytes(secretKey) : secretKey.sk
         return {bytes: bn254.ShortSignature.toRawBytes(identity.i.multiply(sk))}
+    }
+
+    isValidDecryptionKey(publicKey: PublicKey, decryptionKey: DecryptionKey, identity: Identity | Uint8Array): boolean {
+        const sig = decryptionKey.bytes
+        const pk = bn254.G2.ProjectivePoint.fromAffine(publicKey.p)
+        const m = identity instanceof Uint8Array ? identity : identity.m
+        return bn254.verifyShortSignature(sig, m, pk, {DST: this.opts.dsts.H1_G1})
     }
 
     encrypt(message: Uint8Array, identity: Identity, publicKey: PublicKey) {
@@ -30,7 +40,7 @@ export class IBE {
     }
 
     static parsePublicKey(bytes: Uint8Array): PublicKey {
-        return {p: bn254.G2.ProjectivePoint.fromHex(bytes)}
+        return {p: bn254.G2.ProjectivePoint.fromHex(bytes).toAffine()}
     }
 
     static parseDecryptionKey(bytes: Uint8Array): DecryptionKey {
@@ -46,7 +56,7 @@ export class IBE {
     }
 
     static createPublicKey(secretKey: SecretKey): PublicKey {
-        return {p: bn254.G2.ProjectivePoint.BASE.multiply(secretKey.sk)}
+        return {p: bn254.G2.ProjectivePoint.BASE.multiply(secretKey.sk).toAffine()}
     }
 
 }
@@ -56,7 +66,8 @@ export type SecretKey = {
 }
 
 export type Identity = {
-    i: ProjPointType<Fp>,
+    m: Uint8Array
+    i: ProjPointType<Fp>
 }
 
 export type PublicKey = {

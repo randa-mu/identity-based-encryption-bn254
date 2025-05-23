@@ -1,5 +1,6 @@
 import {describe, it, expect} from "@jest/globals"
 import {IBE} from "../src"
+import {bn254} from "@kevincharm/noble-bn254-drand"
 
 describe("encryption", () => {
     const ibe = new IBE()
@@ -25,5 +26,14 @@ describe("encryption", () => {
         const incorrectDecryptionKey = ibe.createDecryptionKey(secretKey, ibe.createIdentity(Buffer.from("banana")))
 
         expect(() => ibe.decrypt(ciphertext, incorrectDecryptionKey)).toThrowError()
+    })
+
+    it("decryption key can be verified", () => {
+        const i_m = Buffer.from("blah")
+        const identity = ibe.createIdentity(i_m)
+
+        const decryptionKey = ibe.createDecryptionKey(secretKey, identity)
+
+        expect(ibe.isValidDecryptionKey(publicKey, decryptionKey, i_m)).toBeTruthy()
     })
 })
