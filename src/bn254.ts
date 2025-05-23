@@ -21,19 +21,19 @@ const G1_SVDW = mapToCurveSVDW(_bn254.G1.CURVE, {
     // c2 = -Z / 2
     c2: _bn254.G1.CURVE.Fp.create(
         BigInt(
-            '10944121435919637611123202872628637544348155578648911831344518947322613104291'
+            "10944121435919637611123202872628637544348155578648911831344518947322613104291"
         )
     ),
     // c3 = sqrt(-g(Z) * (3 * Z^2 + 4 * A))     # sgn0(c3) MUST equal 0
     c3: _bn254.G1.CURVE.Fp.create(
         BigInt(
-            '8815841940592487685674414971303048083897117035520822607866'
+            "8815841940592487685674414971303048083897117035520822607866"
         )
     ),
     // c4 = -4 * g(Z) / (3 * Z^2 + 4 * A)
     c4: _bn254.G1.CURVE.Fp.create(
         BigInt(
-            '7296080957279758407415468581752425029565437052432607887563012631548408736189'
+            "7296080957279758407415468581752425029565437052432607887563012631548408736189"
         )
     ),
 });
@@ -45,41 +45,41 @@ const G2_SVDW = mapToCurveSVDW(_bn254.G2.CURVE, {
     // c1, c2, c3, c4 are the SvdW constants described in https://datatracker.ietf.org/doc/html/rfc9380#straightline-svdw
     // c1 = g(Z)
     c1: _bn254.G2.CURVE.Fp.create(
-        { c0: BigInt('19485874751759354771024239261021720505790618469301721065564631296452457478374'), c1: BigInt('266929791119991161246907387137283842545076965332900288569378510910307636690') }
+        { c0: BigInt("19485874751759354771024239261021720505790618469301721065564631296452457478374"), c1: BigInt("266929791119991161246907387137283842545076965332900288569378510910307636690") }
     ),
     // c2 = -Z / 2
     c2: _bn254.G2.CURVE.Fp.create(
-        { c0: BigInt('10944121435919637611123202872628637544348155578648911831344518947322613104291'), c1: BigInt(0) }
+        { c0: BigInt("10944121435919637611123202872628637544348155578648911831344518947322613104291"), c1: BigInt(0) }
     ),
     // c3 = sqrt(-g(Z) * (3 * Z^2 + 4 * A))     # sgn0(c3) MUST equal 0
     c3: _bn254.G2.CURVE.Fp.create(
-        { c0: BigInt('18992192239972082890849143911285057164064277369389217330423471574879236301292'), c1: BigInt('21819008332247140148575583693947636719449476128975323941588917397607662637108') }
+        { c0: BigInt("18992192239972082890849143911285057164064277369389217330423471574879236301292"), c1: BigInt("21819008332247140148575583693947636719449476128975323941588917397607662637108") }
     ),
     // c4 = -4 * g(Z) / (3 * Z^2 + 4 * A)
     c4: _bn254.G2.CURVE.Fp.create(
-        { c0: BigInt('10499238450719652342378357227399831140106360636427411350395554762472100376473'), c1: BigInt('6940174569119770192419592065569379906172001098655407502803841283667998553941') }
+        { c0: BigInt("10499238450719652342378357227399831140106360636427411350395554762472100376473"), c1: BigInt("6940174569119770192419592065569379906172001098655407502803841283667998553941") }
     ),
 });
 
 // Hash to field parameters for G1
 export const htfDefaultsG1 = Object.freeze({
     // DST: a domain separation tag defined in section 2.2.5
-    DST: 'BN254G1_XMD:KECCAK-256_SVDW_RO_',
+    DST: "BN254G1_XMD:KECCAK-256_SVDW_RO_",
     p: _bn254.fields.Fp.ORDER,
     m: 1,
     k: 128,
-    expand: 'xmd',
+    expand: "xmd",
     hash: keccak_256,
 } as const);
 
 // Hash to field parameters for G2
 export const htfDefaultsG2 = Object.freeze({
     // DST: a domain separation tag defined in section 2.2.5
-    DST: 'BN254G2_XMD:KECCAK-256_SVDW_RO_',
+    DST: "BN254G2_XMD:KECCAK-256_SVDW_RO_",
     p: _bn254.fields.Fp.ORDER,
     m: 2,
     k: 128,
-    expand: 'xmd',
+    expand: "xmd",
     hash: keccak_256,
 } as const);
 
@@ -127,7 +127,7 @@ export const bn254: CurveFn = bls({
     params: {
         ..._bn254.params,
         xNegative: false,
-        twistType: 'divisive',
+        twistType: "divisive",
     },
     htfDefaults: htfDefaultsG1,
     hash: htfDefaultsG1.hash,
@@ -158,8 +158,8 @@ function mapToCurveSVDW<T>(CG: BasicWCurve<T>, opts: { c1: T, c2: T, c3: T, c4: 
 
     validateField(Fp)
     if (!Fp.isValid(CG.a) || !Fp.isValid(CG.b) || !Fp.isValid(opts.z))
-        throw new Error('mapToCurveSimpleSVDW: invalid opts')
-    if (!Fp.isOdd) throw new Error('Fp.isOdd is not implemented!')
+        throw new Error("mapToCurveSimpleSVDW: invalid opts")
+    if (!Fp.isOdd) throw new Error("Fp.isOdd is not implemented!")
 
     // https://www.ietf.org/archive/id/draft-irtf-cfrg-hash-to-curve-10.html#section-f.1
     //    1. c1 = g(Z)

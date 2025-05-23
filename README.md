@@ -44,6 +44,8 @@ const plaintext = ibe.decrypt(ciphertext, signature)
 
 ```
 
+### Serialization and deserialization
+You can also serialize ciphertexts to bytes by using the functions in [serde.ts](./src/serde.ts)
 
 ## Usage with blocklock
 For usage with [blocklock](https://github.com/randa-mu/blocklock-solidity) set the IBE opts depending on the chain you're using, e.g. for chainId of 1:
