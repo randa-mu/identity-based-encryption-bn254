@@ -10,7 +10,7 @@ Install the javascript and the types like so:
 `npm install identity-based-encryption-bn254`
 
 ### Instantiate
-Create an instance of the IBE class, optionally configuring your options (which is only necessary when using custom DSTs.)j
+Create an instance of the IBE class, optionally configuring your options (which is only necessary when using custom DSTs).
 ```typescript
 // import
 import { IBE } from "identity-based-encryption-bn254"
