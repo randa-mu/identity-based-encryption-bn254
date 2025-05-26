@@ -1,8 +1,8 @@
 import {describe, it, expect} from "@jest/globals"
+import {keccak_256} from "@noble/hashes/sha3"
+import {bn254} from "@kevincharm/noble-bn254-drand"
 import {IBE} from "../src"
 import {hashIdentityToG1, hashToBytes, IbeOpts} from "../src/crypto"
-import {keccak_256} from "@noble/hashes/sha3"
-import {bn254} from "../src/bn254"
 
 describe("encryption", () => {
     const ibe = new IBE()
@@ -28,6 +28,15 @@ describe("encryption", () => {
         const incorrectDecryptionKey = ibe.createDecryptionKey(secretKey, ibe.createIdentity(Buffer.from("banana")))
 
         expect(() => ibe.decrypt(ciphertext, incorrectDecryptionKey)).toThrowError()
+    })
+
+    it("decryption key can be verified", () => {
+        const i_m = Buffer.from("blah")
+        const identity = ibe.createIdentity(i_m)
+
+        const decryptionKey = ibe.createDecryptionKey(secretKey, identity)
+
+        expect(ibe.isValidDecryptionKey(publicKey, decryptionKey, i_m)).toBeTruthy()
     })
 })
 
@@ -64,7 +73,8 @@ describe("ibe bn254 KATs", () => {
             k: 128,
             expand_fn: 'xmd',
             dsts: {
-                H1_G1: Buffer.from('TEST_IBE_BN254G1_XMD:KECCAK-256_SVDW_RO_H1_'),
+                H1_G1: Buffer.from('TEST_IBE_
+                                   G1_XMD:KECCAK-256_SVDW_RO_H1_'),
                 H2: Buffer.from('TEST_IBE_BN254_XMD:KECCAK-256_H2_'),
                 H3: Buffer.from('TEST_IBE_BN254_XMD:KECCAK-256_H3_'),
                 H4: Buffer.from('TEST_IBE_BN254_XMD:KECCAK-256_H4_'),
