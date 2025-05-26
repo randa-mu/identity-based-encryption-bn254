@@ -45,12 +45,12 @@ describe("ibe bn254 KATs", () => {
         const OPTS: IbeOpts = {
             hash: keccak_256,
             k: 128,
-            expand_fn: 'xmd',
+            expand_fn: "xmd",
             dsts: {
-                H1_G1: Buffer.from('TEST_IBE_BN254G1_XMD:KECCAK-256_SVDW_RO_H1_'),
-                H2: Buffer.from('TEST_IBE_BN254_XMD:KECCAK-256_H2_'),
-                H3: Buffer.from('TEST_IBE_BN254_XMD:KECCAK-256_H3_'),
-                H4: Buffer.from('TEST_IBE_BN254_XMD:KECCAK-256_H4_'),
+                H1_G1: Buffer.from("TEST_IBE_BN254G1_XMD:KECCAK-256_SVDW_RO_H1_"),
+                H2: Buffer.from("TEST_IBE_BN254_XMD:KECCAK-256_H2_"),
+                H3: Buffer.from("TEST_IBE_BN254_XMD:KECCAK-256_H3_"),
+                H4: Buffer.from("TEST_IBE_BN254_XMD:KECCAK-256_H4_"),
             }
         }
 
@@ -71,26 +71,25 @@ describe("ibe bn254 KATs", () => {
         const OPTS: IbeOpts = {
             hash: keccak_256,
             k: 128,
-            expand_fn: 'xmd',
+            expand_fn: "xmd",
             dsts: {
-                H1_G1: Buffer.from('TEST_IBE_
-                                   G1_XMD:KECCAK-256_SVDW_RO_H1_'),
-                H2: Buffer.from('TEST_IBE_BN254_XMD:KECCAK-256_H2_'),
-                H3: Buffer.from('TEST_IBE_BN254_XMD:KECCAK-256_H3_'),
-                H4: Buffer.from('TEST_IBE_BN254_XMD:KECCAK-256_H4_'),
+                H1_G1: Buffer.from("TEST_IBE_ G1_XMD:KECCAK-256_SVDW_RO_H1_"),
+                H2: Buffer.from("TEST_IBE_BN254_XMD:KECCAK-256_H2_"),
+                H3: Buffer.from("TEST_IBE_BN254_XMD:KECCAK-256_H3_"),
+                H4: Buffer.from("TEST_IBE_BN254_XMD:KECCAK-256_H4_"),
             }
         }
 
         let gt = bn254.pairing(bn254.G1.ProjectivePoint.BASE, bn254.G2.ProjectivePoint.BASE)
         let h2 = hashToBytes(gt, 32, OPTS)
-        expect(Buffer.from(h2)).toEqual(Buffer.from('ad886214af94515c0d08269799f69ef80ccd8f6f63ccc40bfcd6517c5b62510c', 'hex'))
+        expect(Buffer.from(h2)).toEqual(Buffer.from("ad886214af94515c0d08269799f69ef80ccd8f6f63ccc40bfcd6517c5b62510c", "hex"))
 
         gt = bn254.pairing(bn254.G1.ProjectivePoint.BASE.double(), bn254.G2.ProjectivePoint.BASE)
         h2 = hashToBytes(gt, 32, OPTS)
-        expect(Buffer.from(h2)).toEqual(Buffer.from('80a06d11d632a76edf7c3b2772f8c4d9d72095295315977620d224b363c3c49c', 'hex'))
+        expect(Buffer.from(h2)).toEqual(Buffer.from("80a06d11d632a76edf7c3b2772f8c4d9d72095295315977620d224b363c3c49c", "hex"))
 
         gt = bn254.pairing(bn254.G1.ProjectivePoint.BASE.double(), bn254.G2.ProjectivePoint.BASE.double())
         h2 = hashToBytes(gt, 32, OPTS)
-        expect(Buffer.from(h2)).toEqual(Buffer.from('39dc28417110a63f330a0dca9ff58bb936cfcb70407c875f5a114a56488112f5', 'hex'))
+        expect(Buffer.from(h2)).toEqual(Buffer.from("39dc28417110a63f330a0dca9ff58bb936cfcb70407c875f5a114a56488112f5", "hex"))
     })
 })
